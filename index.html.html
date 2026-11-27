@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чарівний Олівчик: Мистецька Руханка!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: radial-gradient(circle at 50% 15%, #FFFBEB 0%, #F0F9FF 55%, #FDF2F8 100%);
+      color: #1E293B;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow-x: hidden;
+    }
+    .font-title {
+      font-family: 'Comfortaa', cursive, sans-serif;
+    }
+    .btn-bounce {
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .btn-bounce:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+    .btn-bounce:active {
+      transform: translateY(1px) scale(0.98);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- ВЕРХНЯ ПАНЕЛЬ НАВІГАЦІЇ ТА НАЛАШТУВАНЬ -->
+  <header class="w-full bg-white/90 backdrop-blur-md border-b-2 border-amber-300 px-4 py-2.5 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 via-orange-500 to-pink-500 flex items-center justify-center text-white text-xl shadow-md transform -rotate-3">
+          ✏️
+        </div>
+        <div>
+          <h1 class="text-base sm:text-xl font-extrabold font-title text-slate-800 leading-tight">
+            Чарівний Олівчик: Мистецька Руханка!
+          </h1>
+          <p class="text-xs font-bold text-orange-600">Інтерактивна гра-руханка для 1–4 класів (51 сек)</p>
+        </div>
+      </div>
+
+      <!-- Кнопки звуку, голосу та повного екрану -->
+      <div class="flex items-center gap-2">
+        <button id="musicBtn" class="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 border border-amber-300 btn-bounce" title="Увімкнути або вимкнути музику">
+          <span id="musicIcon">🎵</span>
+          <span class="hidden sm:inline">Музика</span>
+      <!-- Кнопки мелодії та повного екрану -->
+      <div class="flex items-center gap-2">
+        <button id="musicBtn" class="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs sm:text-sm flex items-center gap-1.5 border border-amber-300 btn-bounce" title="Увімкнути або вимкнути легку мелодію">
+          <span id="musicIcon">🎵</span>
+          <span>Мелодія</span>
+        </button>
+
+        <button id="fullscreenBtn" class="p-2 rounded-xl bg-slate-100 hover:bg-pink-100 text-slate-700 hover:text-pink-700 border border-slate-200 btn-bounce" title="Повний екран">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ОСНОВНИЙ ІГРОВИЙ ПРОСТІР -->
+  <main class="max-w-6xl mx-auto w-full px-3 sm:px-4 py-3 flex-1 flex flex-col justify-center gap-3">
+
+    <!-- ШКАЛА ПРОГРЕСУ (7 ВПРАВ) -->
+    <div class="bg-white/95 rounded-2xl p-2.5 sm:p-3 shadow-sm border-2 border-amber-200">
+      <div class="flex items-center justify-between text-xs font-extrabold text-slate-600 mb-2 px-1">
+        <span>Прогрес руханки:</span>
+        <span id="progressLabel" class="text-orange-600">Вправа 1 із 7 • Загалом 51 сек</span>
+      </div>
+      <div id="stepsContainer" class="grid grid-cols-7 gap-1.5 sm:gap-2">
+        <!-- Заповнюється динамічно через JS -->
+      </div>
+    </div>
+
+    <!-- ЦЕНТРАЛЬНА СЦЕНА + ПАНЕЛЬ КОМАНД -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
+
+      <!-- СЦЕНА З ПЕРСОНАЖЕМ У ПОВНИЙ ЗРІСТ (7 КОЛОНОК) -->
+      <div class="lg:col-span-7 bg-white rounded-3xl p-3 sm:p-4 shadow-xl border-2 border-amber-300 relative flex flex-col justify-between overflow-hidden">
+        
+        <!-- Верхній рядок сцени -->
+        <div class="flex items-center justify-between gap-2 z-20 mb-1">
+          <span id="stepBadge" class="px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-sm">
+            Вправа 1 / 7
+          </span>
+          <span id="liveMovementTag" class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-xs">
+            ✨ Готовий до старту!
+          </span>
+        </div>
+
+        <!-- АРЕНА АНІМАЦІЇ (КАНВАС + ПОВНОРОСТОВИЙ SVG ОЛІВЧИК) -->
+        <div id="arenaContainer" class="relative w-full h-[340px] sm:h-[400px] rounded-2xl overflow-hidden bg-gradient-to-b from-sky-100/80 via-amber-50/40 to-emerald-100/60 border-2 border-amber-200 flex items-center justify-center">
+          
+          <!-- Інтерактивне полотно для мазків фарби, іскор, спіралей та конфеті -->
+          <canvas id="fxCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+          <!-- ПОВНОРОСТОВИЙ ШАРНІРНИЙ SVG-ПЕРСОНАЖ: ЧАРІВНИЙ ОЛІВЧИК -->
+          <!-- ViewBox має достатній запас зверху, знизу і з боків, щоб руки й ноги ніколи не обрізалися -->
+          <svg id="pencilSvg" viewBox="0 0 360 400" class="w-full h-full max-w-[360px] max-h-[400px] z-20 overflow-visible">
+            <defs>
+              <!-- Градієнт тіла олівця -->
+              <linearGradient id="pencilBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#F59E0B" />
+                <stop offset="30%" stop-color="#FBBF24" />
+                <stop offset="70%" stop-color="#F59E0B" />
+                <stop offset="100%" stop-color="#D97706" />
+              </linearGradient>
+              <!-- Градієнт гумки-шапочки -->
+              <linearGradient id="eraserGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#F472B6" />
+                <stop offset="50%" stop-color="#F9A8D4" />
+                <stop offset="100%" stop-color="#EC4899" />
+              </linearGradient>
+              <!-- Градієнт металевого обідка -->
+              <linearGradient id="ferruleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#94A3B8" />
+                <stop offset="50%" stop-color="#E2E8F0" />
+                <stop offset="100%" stop-color="#64748B" />
+              </linearGradient>
+              <!-- Градієнт дерев'яного конуса -->
+              <linearGradient id="woodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#FDE68A" />
+                <stop offset="50%" stop-color="#FEF3C7" />
+                <stop offset="100%" stop-color="#FCD34D" />
+              </linearGradient>
+              <!-- Градієнт кросівок -->
+              <linearGradient id="sneakerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3B82F6" />
+                <stop offset="100%" stop-color="#1D4ED8" />
+              </linearGradient>
+            </defs>
+
+            <!-- ТІНЬ НА ПІДЛОЗІ (динамічно змінюється при стрибках і присіданнях) -->
+            <ellipse id="floorShadow" cx="180" cy="364" rx="56" ry="11" fill="rgba(15, 23, 42, 0.16)" />
+
+            <!-- КОРЕНЕВА ГРУПА ВСЬОГО ПЕРСОНАЖА (переміщення по X/Y, стрибки, масштаб оберту) -->
+            <g id="characterRoot" transform="translate(180, 0)">
+
+              <!-- ================= НІЖКИ ТА КРОСІВКИ ================= -->
+              <!-- Ліва нога (точка кріплення стегна: x = -18, y = 268) -->
+              <g id="leftHip" transform="translate(-18, 268)">
+                <!-- Стегно -->
+                <line id="leftThigh" x1="0" y1="0" x2="0" y2="38" stroke="#1E293B" stroke-width="11" stroke-linecap="round" />
+                <!-- Коліно + Гомілка + Кросівка -->
+                <g id="leftKnee" transform="translate(0, 38)">
+                  <line id="leftShin" x1="0" y1="0" x2="0" y2="38" stroke="#1E293B" stroke-width="10" stroke-linecap="round" />
+                  <!-- Кросівка ліва -->
+                  <g id="leftFoot" transform="translate(0, 38)">
+                    <path d="M -22 6 Q -22 -8 -4 -8 L 10 -8 Q 16 -8 16 6 Z" fill="url(#sneakerGrad)" stroke="#1E3A8A" stroke-width="2" />
+                    <rect x="-24" y="5" width="42" height="6" rx="3" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" />
+                    <circle cx="-6" cy="-1" r="2.5" fill="#FBBF24" />
+                  </g>
+                </g>
+              </g>
+
+              <!-- Права нога (точка кріплення стегна: x = 18, y = 268) -->
+              <g id="rightHip" transform="translate(18, 268)">
+                <!-- Стегно -->
+                <line id="rightThigh" x1="0" y1="0" x2="0" y2="38" stroke="#1E293B" stroke-width="11" stroke-linecap="round" />
+                <!-- Коліно + Гомілка + Кросівка -->
+                <g id="rightKnee" transform="translate(0, 38)">
+                  <line id="rightShin" x1="0" y1="0" x2="0" y2="38" stroke="#1E293B" stroke-width="10" stroke-linecap="round" />
+                  <!-- Кросівка права -->
+                  <g id="rightFoot" transform="translate(0, 38)">
+                    <path d="M -16 6 Q -16 -8 -10 -8 L 4 -8 Q 22 -8 22 6 Z" fill="url(#sneakerGrad)" stroke="#1E3A8A" stroke-width="2" />
+                    <rect x="-18" y="5" width="42" height="6" rx="3" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" />
+                    <circle cx="6" cy="-1" r="2.5" fill="#FBBF24" />
+                  </g>
+                </g>
+              </g>
+
+              <!-- ================= КОРПУС ОЛІВЧИКА (нахиляється і опускається при присіданнях) ================= -->
+              <!-- Точка опори тазу: (0, 268) -->
+              <g id="torsoPivot" transform="translate(0, 268)">
+
+                <!-- Дерев'яний конус і кольоровий грифель внизу корпусу -->
+                <polygon points="-34,-18 34,-18 0,24" fill="url(#woodGrad)" stroke="#B45309" stroke-width="2.5" stroke-linejoin="round" />
+                <!-- Яскравий кольоровий грифель на кінчику -->
+                <polygon id="pencilTipColor" points="-11,10 11,10 0,24" fill="#EF4444" stroke="#991B1B" stroke-width="1.5" stroke-linejoin="round" />
+
+                <!-- Основний шестигранний корпус олівця -->
+                <rect x="-34" y="-168" width="68" height="150" rx="6" fill="url(#pencilBodyGrad)" stroke="#B45309" stroke-width="2.5" />
+                <!-- Грані олівця для 3D-об'єму -->
+                <line x1="-12" y1="-168" x2="-12" y2="-18" stroke="#D97706" stroke-width="2" opacity="0.65" />
+                <line x1="12" y1="-168" x2="12" y2="-18" stroke="#D97706" stroke-width="2" opacity="0.65" />
+
+                <!-- Металевий ободок (ферула) -->
+                <rect x="-35" y="-186" width="70" height="18" rx="4" fill="url(#ferruleGrad)" stroke="#475569" stroke-width="2" />
+                <line x1="-34" y1="-180" x2="34" y2="-180" stroke="#64748B" stroke-width="1.5" />
+                <line x1="-34" y1="-174" x2="34" y2="-174" stroke="#64748B" stroke-width="1.5" />
+
+                <!-- Рожева гумка-шапочка зверху -->
+                <path d="M -33 -186 L -33 -208 Q -33 -224 0 -224 Q 33 -224 33 -208 L 33 -186 Z" fill="url(#eraserGrad)" stroke="#BE185D" stroke-width="2.5" />
+                <!-- Блік на гумці -->
+                <path d="M -22 -208 Q -22 -215 -10 -216" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+
+                <!-- ================= ОБЛИЧЧЯ ОЛІВЧИКА ================= -->
+                <g id="faceGroup" transform="translate(0, -108)">
+                  <!-- Брови -->
+                  <path id="leftBrow" d="M -23 -22 Q -14 -28 -6 -23" fill="none" stroke="#78350F" stroke-width="3" stroke-linecap="round" />
+                  <path id="rightBrow" d="M 6 -23 Q 14 -28 23 -22" fill="none" stroke="#78350F" stroke-width="3" stroke-linecap="round" />
+
+                  <!-- Ліве око -->
+                  <circle cx="-14" cy="-8" r="11" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2" />
+                  <circle id="leftPupil" cx="-13" cy="-8" r="5" fill="#1E293B" />
+                  <circle cx="-11" cy="-10" r="2" fill="#FFFFFF" />
+
+                  <!-- Праве око -->
+                  <circle cx="14" cy="-8" r="11" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2" />
+                  <circle id="rightPupil" cx="13" cy="-8" r="5" fill="#1E293B" />
+                  <circle cx="15" cy="-10" r="2" fill="#FFFFFF" />
+
+                  <!-- Рум'янець на щічках -->
+                  <ellipse cx="-23" cy="5" rx="5.5" ry="3.5" fill="#FB7185" opacity="0.65" />
+                  <ellipse cx="23" cy="5" rx="5.5" ry="3.5" fill="#FB7185" opacity="0.65" />
+
+                  <!-- Усмішка / емоційний рот -->
+                  <path id="mouthPath" d="M -13 10 Q 0 24 13 10" fill="none" stroke="#1E293B" stroke-width="3.2" stroke-linecap="round" />
+                </g>
+
+                <!-- ================= РУЧКИ В БІЛИХ РУКАВИЧКАХ ================= -->
+                <!-- Ліва рука (плече: x = -34, y = -102) -->
+                <g id="leftShoulder" transform="translate(-34, -102)">
+                  <line id="leftArmLine" x1="0" y1="0" x2="-46" y2="26" stroke="#1E293B" stroke-width="9" stroke-linecap="round" />
+                  <!-- Біла мультяшна рукавичка -->
+                  <g transform="translate(-48, 27)">
+                    <circle cx="0" cy="0" r="11" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2" />
+                    <circle cx="-5" cy="-7" r="4.5" fill="#FFFFFF" stroke="#1E293B" stroke-width="2" />
+                  </g>
+                </g>
+
+                <!-- Права рука (плече: x = 34, y = -102) -->
+                <g id="rightShoulder" transform="translate(34, -102)">
+                  <line id="rightArmLine" x1="0" y1="0" x2="46" y2="26" stroke="#1E293B" stroke-width="9" stroke-linecap="round" />
+                  <!-- Біла мультяшна рукавичка -->
+                  <g transform="translate(48, 27)">
+                    <circle cx="0" cy="0" r="11" fill="#FFFFFF" stroke="#1E293B" stroke-width="2.2" />
+                    <circle cx="5" cy="-7" r="4.5" fill="#FFFFFF" stroke="#1E293B" stroke-width="2" />
+                  </g>
+                </g>
+
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ПРАВА ПАНЕЛЬ: КОМАНДА, ТАЙМЕР ТА ШВИДКИЙ ВИБІР ВПРАВ (5 КОЛОНОК) -->
+      <div class="lg:col-span-5 flex flex-col justify-between gap-3">
+
+        <!-- МОВНА ХМАРИНКА КОМАНДИ ВІД ОЛІВЧИКА -->
+        <div class="bg-white rounded-3xl p-4 shadow-md border-2 border-amber-300 flex items-center gap-3 relative">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-white flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
+            ✏️
+          </div>
+          <div class="flex-1">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-orange-600 block">
+              Команда Олівчика:
+            </span>
+            <h2 id="commandTitle" class="text-lg sm:text-xl font-extrabold font-title text-slate-800 leading-snug">
+              «Привіт! Готові до мистецької руханки?»
+            </h2>
+            <p id="commandHint" class="text-xs sm:text-sm font-semibold text-slate-600 mt-0.5">
+              Натисни «ПОЧАТИ РУХАНКУ!», і ми виконаємо 7 веселих вправ разом!
+            </p>
+          </div>
+        </div>
+
+        <!-- КОЛОВИЙ ТАЙМЕР ПОТОЧНОЇ ВПРАВИ -->
+        <div class="bg-gradient-to-br from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-4 shadow-md border-2 border-amber-200 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block">Час вправи</span>
+            <p id="timerSubtext" class="text-sm sm:text-base font-extrabold font-title text-slate-800 mt-0.5">
+              Повторюй рухи за Олівчиком!
+            </p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">Кожен рух триває 7–8 секунд</p>
+          </div>
+
+          <div class="relative w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+              <path class="text-amber-200" stroke-width="4" stroke="currentColor" fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path id="timerRing" class="text-orange-500 transition-all duration-200" stroke-dasharray="100, 100" stroke-width="4" stroke-linecap="round" stroke="currentColor" fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="timerNumber" class="text-2xl font-black font-title text-slate-800 leading-none">7</span>
+              <span class="text-[10px] font-extrabold text-slate-500 uppercase">сек</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- КНОПКИ ШВИДКОГО ВИБОРУ БУДЬ-ЯКОЇ З 7 ВПРАВ -->
+        <div class="bg-white rounded-3xl p-3.5 shadow-md border border-slate-200 flex-1 flex flex-col justify-center">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2 px-1 block">
+            Обери окрему вправу для повторення:
+          </span>
+          <div id="exerciseButtonsGrid" class="grid grid-cols-2 gap-1.5">
+            <!-- Кнопки 7 вправ створюються автоматично -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- НИЖНЯ ПАНЕЛЬ УПРАВЛІННЯ ГРОЮ -->
+  <footer class="w-full bg-white border-t-2 border-amber-300 px-4 py-3 shadow-lg z-40">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-4">
+      <button id="restartBtn" class="px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-900 font-extrabold text-sm flex items-center gap-1.5 border border-slate-200 btn-bounce">
+        <span>🔄</span>
+        <span>Спочатку</span>
+      </button>
+
+      <button id="playPauseBtn" class="px-7 sm:px-9 py-3 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-white font-extrabold font-title text-base sm:text-lg shadow-lg flex items-center gap-2 btn-bounce">
+        <span id="playPauseIcon">▶️</span>
+        <span id="playPauseText">ПОЧАТИ РУХАНКУ!</span>
+      </button>
+
+      <button id="nextBtn" class="px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-sm flex items-center gap-1.5 shadow-md btn-bounce">
+        <span>Далі</span>
+        <span>➡️</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ФІНАЛЬНЕ ВІКНО ПЕРЕМОГИ -->
+  <div id="finishModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="finishCard" class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border-4 border-amber-400 transform scale-90 transition-transform duration-300">
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-400 via-orange-500 to-pink-500 text-white flex items-center justify-center text-4xl shadow-lg mb-4 animate-bounce">
+        🎨
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold font-title text-slate-800 mb-2">
+        УРА! РУХАНКУ ЗАВЕРШЕНО!
+      </h2>
+      <p class="text-sm sm:text-base font-bold text-slate-700 bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 my-4">
+        «Молодці, маленькі художники! Ви чудово розім’ялися, пострибали та намалювали рухами справжній шедевр!»
+      </p>
+      <button id="modalReplayBtn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-white font-extrabold font-title text-lg shadow-lg btn-bounce">
+        🔄 ЗІГРАТИ ЩЕ РАЗ!
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. СПИСОК 7 ВПРАВ (ЗАГАЛЬНА ТРИВАЛІСТЬ: 7+8+7+7+8+7+7 = 51 СЕКУНДА)
+       ========================================================================= */
+    const EXERCISES = [
+      {
+        id: 'armsUp',
+        shortName: '1. Руки вгору',
+        icon: '🙌',
+        command: 'Піднімаємо руки вгору!',
+        hint: 'Тягнемося обома ручками високо до сонечка та стаємо навшпиньки!',
+        tag: '🙌 Піднімаємо руки вгору',
+        duration: 7,
+        tipColor: '#F59E0B'
+      },
+      {
+        id: 'squat',
+        shortName: '2. Присідаємо',
+        icon: '🦵',
+        command: 'Присідаємо!',
+        hint: 'Згинаємо коліна, опускаємося вниз і плавно підводимося!',
+        tag: '🦵 Глибокі присідання',
+        duration: 8,
+        tipColor: '#EC4899'
+      },
+      {
+        id: 'tiltRight',
+        shortName: '3. Нахил вправо',
+        icon: '➡️',
+        command: 'Нахиляємося вправо!',
+        hint: 'Нахиляємо корпус праворуч і малюємо в повітрі синю дугу!',
+        tag: '➡️ Нахил корпусу вправо',
+        duration: 7,
+        tipColor: '#3B82F6'
+      },
+      {
+        id: 'tiltLeft',
+        shortName: '4. Нахил вліво',
+        icon: '⬅️',
+        command: 'Нахиляємося вліво!',
+        hint: 'Нахиляємо корпус ліворуч і малюємо зелену хвилю!',
+        tag: '⬅️ Нахил корпусу вліво',
+        duration: 7,
+        tipColor: '#10B981'
+      },
+      {
+        id: 'jump',
+        shortName: '5. Стрибаємо',
+        icon: '⭐',
+        command: 'Стрибаємо!',
+        hint: 'Відштовхуємося ніжками від підлоги та весело підстрибуємо вгору!',
+        tag: '⭐ Веселі стрибки вгору',
+        duration: 8,
+        tipColor: '#F97316'
+      },
+      {
+        id: 'spin',
+        shortName: '6. Крутимося',
+        icon: '🌀',
+        command: 'Крутимося!',
+        hint: 'Розводимо ручки в сторони й плавно обертаємося навколо себе!',
+        tag: '🌀 Обертання всім тілом',
+        duration: 7,
+        tipColor: '#8B5CF6'
+      },
+      {
+        id: 'stomp',
+        shortName: '7. Тупаємо ніжками',
+        icon: '👟',
+        command: 'Тупаємо ніжками!',
+        hint: 'Високо піднімаємо коліна та ритмічно тупаємо лівою і правою ніжкою!',
+        tag: '👟 Активне тупотіння ніжками',
+        duration: 7,
+        tipColor: '#EF4444'
+      }
+    ];
+
+    /* =========================================================================
+       2. СТАН ГРИ ТА ПОСИЛАННЯ НА DOM-ЕЛЕМЕНТИ
+       ========================================================================= */
+    let currentIndex = 0;
+    let isRunning = false;
+    let timeLeft = EXERCISES[0].duration;
+    let secondInterval = null;
+    let animStartTime = performance.now();
+    let lastSoundPhase = -1;
+
+    let musicEnabled = true;
+
+    // SVG-суглоби Чарівного Олівчика
+    const characterRoot = document.getElementById('characterRoot');
+    const floorShadow = document.getElementById('floorShadow');
+    const torsoPivot = document.getElementById('torsoPivot');
+    const leftHip = document.getElementById('leftHip');
+    const leftKnee = document.getElementById('leftKnee');
+    const rightHip = document.getElementById('rightHip');
+    const rightKnee = document.getElementById('rightKnee');
+    const leftShoulder = document.getElementById('leftShoulder');
+    const rightShoulder = document.getElementById('rightShoulder');
+    const mouthPath = document.getElementById('mouthPath');
+    const pencilTipColor = document.getElementById('pencilTipColor');
+
+    // UI-елементи
+    const stepsContainer = document.getElementById('stepsContainer');
+    const progressLabel = document.getElementById('progressLabel');
+    const stepBadge = document.getElementById('stepBadge');
+    const liveMovementTag = document.getElementById('liveMovementTag');
+    const commandTitle = document.getElementById('commandTitle');
+    const commandHint = document.getElementById('commandHint');
+    const timerNumber = document.getElementById('timerNumber');
+    const timerRing = document.getElementById('timerRing');
+    const exerciseButtonsGrid = document.getElementById('exerciseButtonsGrid');
+
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const playPauseText = document.getElementById('playPauseText');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const musicBtn = document.getElementById('musicBtn');
+    const musicIcon = document.getElementById('musicIcon');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    const finishModal = document.getElementById('finishModal');
+    const finishCard = document.getElementById('finishCard');
+    const modalReplayBtn = document.getElementById('modalReplayBtn');
+
+    const fxCanvas = document.getElementById('fxCanvas');
+    const ctx = fxCanvas.getContext('2d');
+
+    /* =========================================================================
+       3. ЗВУКОВИЙ ДВИГУН (WEB AUDIO API) — ЛИШЕ ЛЕГКА М'ЯКА ФОНОВА МЕЛОДІЯ
+       ========================================================================= */
+    let audioCtx = null;
+    let melodyTimer = null;
+    let beatStep = 0;
+
+    // Ніжна, легка дитяча мелодія у стилі музичної скриньки (пентатоніка До мажор)
+    const NOTES = [
+      523.25, 659.25, 783.99, 659.25,
+      587.33, 698.46, 880.00, 783.99,
+      659.25, 783.99, 1046.50, 783.99,
+      698.46, 659.25, 587.33, 523.25
+    ];
+    const SOFT_PAD = [261.63, 196.00, 220.00, 196.00];
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSoftNote(freq, dur, type = 'sine', maxVol = 0.032) {
+      if (!musicEnabled || !audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+
+        // М'яка огинаюча (плавна атака та ніжне згасання без клацань)
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(maxVol, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + dur + 0.02);
+      } catch (e) {}
+    }
+
+    function startMusic() {
+      if (!musicEnabled) return;
+      ensureAudio();
+      stopMusic();
+      melodyTimer = setInterval(() => {
+        if (!isRunning || !musicEnabled) return;
+        const n = NOTES[beatStep % NOTES.length];
+        playSoftNote(n, 0.42, 'sine', 0.032);
+        if (beatStep % 4 === 0) {
+          const pad = SOFT_PAD[(beatStep / 4) % SOFT_PAD.length];
+          playSoftNote(pad, 1.1, 'sine', 0.022);
+        }
+        beatStep++;
+      }, 360);
+    }
+
+    function stopMusic() {
+      if (melodyTimer) {
+        clearInterval(melodyTimer);
+        melodyTimer = null;
+      }
+    }
+
+    /* =========================================================================
+       4. ЕФЕКТИ НА ПОЛОТНІ (ЧАСТИНКИ ФАРБИ, БРИЗКИ, СПІРАЛІ, КОНФЕТІ)
+       ========================================================================= */
+    let particles = [];
+
+    function resizeCanvas() {
+      fxCanvas.width = fxCanvas.parentElement.clientWidth;
+      fxCanvas.height = fxCanvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function spawnParticles(x, y, color, count = 8, speed = 3) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const vel = (0.4 + Math.random() * 0.8) * speed;
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * vel,
+          vy: Math.sin(angle) * vel - 1,
+          size: 4 + Math.random() * 6,
+          color,
+          alpha: 1,
+          decay: 0.02 + Math.random() * 0.015
+        });
+      }
+    }
+
+    function drawCanvasEffects(now) {
+      ctx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+      const w = fxCanvas.width;
+      const h = fxCanvas.height;
+      const ex = EXERCISES[currentIndex];
+
+      // Малюємо тематичний слід залежно від активної вправи
+      if (isRunning) {
+        const t = now * 0.004;
+        if (ex.id === 'tiltRight' || ex.id === 'tiltLeft') {
+          // Кольорова дуга в повітрі від кінчика олівчика
+          ctx.save();
+          ctx.beginPath();
+          const dir = ex.id === 'tiltRight' ? 1 : -1;
+          ctx.arc(w / 2, h * 0.65, 130, -Math.PI * 0.5, -Math.PI * 0.5 + dir * (0.4 + Math.sin(t) * 0.35), dir < 0);
+          ctx.strokeStyle = ex.tipColor;
+          ctx.lineWidth = 10;
+          ctx.lineCap = 'round';
+          ctx.globalAlpha = 0.45;
+          ctx.stroke();
+          ctx.restore();
+        } else if (ex.id === 'spin') {
+          // Райдужна спіраль навколо персонажа під час обертання
+          ctx.save();
+          for (let i = 0; i < 16; i++) {
+            const a = t * 1.6 + i * 0.38;
+            const r = 45 + i * 7;
+            const px = w / 2 + Math.cos(a) * r;
+            const py = h * 0.55 + Math.sin(a) * (r * 0.35);
+            ctx.fillStyle = `hsl(${(i * 25 + now * 0.1) % 360}, 88%, 58%)`;
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      }
+
+      // Малюємо частинки фарби та конфеті
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08; // легка гравітація
+        p.alpha -= p.decay;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    /* =========================================================================
+       5. РЕАЛЬНА КІНЕМАТИЧНА АНІМАЦІЯ СУГЛОБІВ ОЛІВЧИКА (60 FPS)
+       ========================================================================= */
+    function animateCharacter(now) {
+      drawCanvasEffects(now);
+
+      const elapsed = (now - animStartTime) / 1000;
+      const ex = EXERCISES[currentIndex];
+
+      // Базові параметри суглобів (нейтральна стійка)
+      let rootX = 180;
+      let rootY = 0;
+      let rootScaleX = 1;
+      let rootScaleY = 1;
+
+      let torsoY = 268;
+      let torsoAngle = 0;
+
+      let lHipAngle = 0;
+      let lKneeAngle = 0;
+      let lHipY = 268;
+
+      let rHipAngle = 0;
+      let rKneeAngle = 0;
+      let rHipY = 268;
+
+      let lArmAngle = 0; // 0 = руки опущені вниз-вбік; 135 = підняті прямо вгору!
+      let rArmAngle = 0; // 0 = руки опущені вниз-вбік; -135 = підняті прямо вгору!
+
+      let shadowRx = 56;
+      let shadowOpacity = 0.16;
+
+      if (!isRunning) {
+        // Легке привітне погойдування на старті/паузі
+        const breath = Math.sin(elapsed * 3);
+        torsoY = 268 + breath * 2;
+        lArmAngle = 15 + Math.sin(elapsed * 4) * 12;
+        rArmAngle = -15 - Math.sin(elapsed * 4) * 12;
+        mouthPath.setAttribute('d', 'M -13 10 Q 0 24 13 10');
+      } else {
+        // АКТИВНІ ВПРАВИ З ПОВНИМ РУХОМ ВІДПОВІДНИХ ЧАСТИН ТІЛА
+        if (ex.id === 'armsUp') {
+          // 1. «Піднімаємо руки вгору!» — обидві руки піднімаються прямо вгору + витягування навшпиньки
+          const cycle = (Math.sin(elapsed * 3.2 - Math.PI / 2) + 1) / 2; // 0..1
+          lArmAngle = 132 * cycle; // Ліва рука піднімається вертикально вгору
+          rArmAngle = -132 * cycle; // Права рука піднімається вертикально вгору
+          rootY = -12 * cycle; // Підйом навшпиньки
+          rootScaleY = 1 + 0.04 * cycle;
+          shadowRx = 56 - 10 * cycle;
+          mouthPath.setAttribute('d', 'M -14 9 Q 0 27 14 9 Z');
+
+          if (cycle > 0.92 && Math.random() < 0.35) {
+            spawnParticles(fxCanvas.width / 2 + (Math.random() - 0.5) * 90, fxCanvas.height * 0.2, '#FBBF24', 2, 1.8);
+          }
+
+        } else if (ex.id === 'squat') {
+          // 2. «Присідаємо!» — реальне згинання колін, розведення стегон та опускання корпусу вниз
+          const cycle = (Math.sin(elapsed * 2.8 - Math.PI / 2) + 1) / 2; // 0 (стоїть) -> 1 (глибокий присід)
+          const drop = 44 * cycle;
+          torsoY = 268 + drop;
+          lHipY = 268 + drop;
+          rHipY = 268 + drop;
+
+          // Коліна згинаються назовні та вперед, щоб стопи залишалися на підлозі!
+          lHipAngle = 56 * cycle;
+          lKneeAngle = -56 * cycle;
+          rHipAngle = -56 * cycle;
+          rKneeAngle = 56 * cycle;
+
+          // Руки витягуються вперед для рівноваги при присіданні
+          lArmAngle = 65 * cycle;
+          rArmAngle = -65 * cycle;
+          shadowRx = 56 + 16 * cycle;
+          mouthPath.setAttribute('d', cycle > 0.6 ? 'M -8 14 A 7 7 0 1 0 8 14 A 7 7 0 1 0 -8 14' : 'M -13 10 Q 0 24 13 10');
+
+        } else if (ex.id === 'tiltRight') {
+          // 3. «Нахиляємося вправо!» — корпус і голова чітко нахиляються праворуч (за годинниковою стрілкою)
+          const cycle = (Math.sin(elapsed * 2.8 - Math.PI / 2) + 1) / 2; // 0..1
+          torsoAngle = 28 * cycle; // Виразний нахил корпусу вправо
+          lArmAngle = 125 * cycle; // Ліва рука дугою над головою вправо
+          rArmAngle = 15 * cycle;  // Права рука вздовж боку
+          mouthPath.setAttribute('d', 'M -13 10 Q 0 25 13 10');
+
+          if (cycle > 0.7 && Math.random() < 0.25) {
+            spawnParticles(fxCanvas.width * 0.62, fxCanvas.height * 0.35, '#3B82F6', 2, 2);
+          }
+
+        } else if (ex.id === 'tiltLeft') {
+          // 4. «Нахиляємося вліво!» — корпус і голова чітко нахиляються ліворуч (проти годинникової стрілки)
+          const cycle = (Math.sin(elapsed * 2.8 - Math.PI / 2) + 1) / 2; // 0..1
+          torsoAngle = -28 * cycle; // Виразний нахил корпусу вліво
+          rArmAngle = -125 * cycle; // Права рука дугою над головою вліво
+          lArmAngle = -15 * cycle;  // Ліва рука вздовж боку
+          mouthPath.setAttribute('d', 'M -13 10 Q 0 25 13 10');
+
+          if (cycle > 0.7 && Math.random() < 0.25) {
+            spawnParticles(fxCanvas.width * 0.38, fxCanvas.height * 0.35, '#10B981', 2, 2);
+          }
+
+        } else if (ex.id === 'jump') {
+          // 5. «Стрибаємо!» — підготовка (згинання колін) -> справжній відрив від підлоги -> м'яке приземлення
+          const phase = (elapsed * 1.45) % 1; // 1.45 стрибка за секунду
+          const phaseIndex = Math.floor(elapsed * 1.45);
+
+          if (phase < 0.22) {
+            // Присідання перед відштовхуванням
+            const p = phase / 0.22;
+            const drop = 22 * p;
+            torsoY = 268 + drop;
+            lHipY = 268 + drop;
+            rHipY = 268 + drop;
+            lHipAngle = 36 * p;
+            lKneeAngle = -36 * p;
+            rHipAngle = -36 * p;
+            rKneeAngle = 36 * p;
+            lArmAngle = -20 * p;
+            rArmAngle = 20 * p;
+          } else if (phase < 0.82) {
+            // Політ у повітрі!
+            const airT = (phase - 0.22) / 0.60; // 0..1
+            const jumpHeight = Math.sin(airT * Math.PI) * 68;
+            rootY = -jumpHeight;
+            lArmAngle = 128 * Math.sin(airT * Math.PI);
+            rArmAngle = -128 * Math.sin(airT * Math.PI);
+            // Ніжки весело розводяться у стрибку
+            lHipAngle = 16 * Math.sin(airT * Math.PI);
+            rHipAngle = -16 * Math.sin(airT * Math.PI);
+            shadowRx = Math.max(22, 56 - jumpHeight * 0.45);
+            shadowOpacity = Math.max(0.05, 0.16 - jumpHeight * 0.0015);
+            mouthPath.setAttribute('d', 'M -14 9 Q 0 28 14 9 Z');
+
+            if (phaseIndex !== lastSoundPhase) {
+              lastSoundPhase = phaseIndex;
+              const colors = ['#F59E0B', '#EC4899', '#3B82F6', '#10B981'];
+              spawnParticles(fxCanvas.width / 2, fxCanvas.height * 0.78, colors[phaseIndex % colors.length], 14, 4);
+            }
+          } else {
+            // Приземлення з амортизацією
+            const landP = 1 - (phase - 0.82) / 0.18;
+            const drop = 14 * landP;
+            torsoY = 268 + drop;
+            lHipY = 268 + drop;
+            rHipY = 268 + drop;
+            lHipAngle = 24 * landP;
+            lKneeAngle = -24 * landP;
+            rHipAngle = -24 * landP;
+            rKneeAngle = 24 * landP;
+          }
+
+        } else if (ex.id === 'spin') {
+          // 6. «Крутимося!» — повний оберт тіла на 360 градусів із розведеними руками та кроками
+          const spinSpeed = elapsed * 3.4;
+          // Імітація 3D-оберту через косинус ширини та синус зміщення по X
+          const cosVal = Math.cos(spinSpeed);
+          rootScaleX = Math.abs(cosVal) < 0.18 ? (cosVal >= 0 ? 0.18 : -0.18) : cosVal;
+          rootX = 180 + Math.sin(spinSpeed) * 26;
+          rootY = -Math.abs(Math.sin(spinSpeed * 2)) * 10;
+
+          // Руки широко розведені в сторони
+          lArmAngle = 78;
+          rArmAngle = -78;
+          // Крок ніжками під час оберту
+          lHipAngle = Math.sin(spinSpeed * 2) * 18;
+          rHipAngle = -Math.sin(spinSpeed * 2) * 18;
+          mouthPath.setAttribute('d', 'M -14 10 Q 0 25 14 10');
+
+          if (Math.random() < 0.25) {
+            spawnParticles(fxCanvas.width / 2 + Math.sin(spinSpeed) * 40, fxCanvas.height * 0.5, '#8B5CF6', 2, 2.2);
+          }
+
+        } else if (ex.id === 'stomp') {
+          // 7. «Тупаємо ніжками!» — активне почергове піднімання лівої та правої ноги з тупотінням
+          const marchSpeed = elapsed * 7.5;
+          const stepWave = Math.sin(marchSpeed); // -1..+1
+          const stepIndex = Math.floor(marchSpeed / Math.PI);
+
+          // Ліва нога піднімається коли stepWave > 0
+          const leftLift = Math.max(0, stepWave);
+          lHipY = 268 - leftLift * 24;
+          lHipAngle = 35 * leftLift;
+          lKneeAngle = -35 * leftLift;
+
+          // Права нога піднімається коли stepWave < 0
+          const rightLift = Math.max(0, -stepWave);
+          rHipY = 268 - rightLift * 24;
+          rHipAngle = -35 * rightLift;
+          rKneeAngle = 35 * rightLift;
+
+          // Корпус і руки бадьоро рухаються в такт крокам
+          torsoY = 268 - Math.abs(stepWave) * 6;
+          torsoAngle = stepWave * 5;
+          lArmAngle = 30 - stepWave * 35;
+          rArmAngle = -30 - stepWave * 35;
+          mouthPath.setAttribute('d', 'M -14 9 Q 0 26 14 9 Z');
+
+          if (stepIndex !== lastSoundPhase) {
+            lastSoundPhase = stepIndex;
+            const footX = stepWave > 0 ? fxCanvas.width / 2 + 24 : fxCanvas.width / 2 - 24;
+            spawnParticles(footX, fxCanvas.height * 0.88, '#EF4444', 7, 2.5);
+          }
+        }
+      }
+
+      // Застосування розрахованих координат і кутів до SVG-суглобів
+      characterRoot.setAttribute('transform', `translate(${rootX}, ${rootY}) scale(${rootScaleX}, ${rootScaleY})`);
+      floorShadow.setAttribute('cx', rootX);
+      floorShadow.setAttribute('rx', shadowRx);
+      floorShadow.setAttribute('fill', `rgba(15, 23, 42, ${shadowOpacity})`);
+
+      torsoPivot.setAttribute('transform', `translate(0, ${torsoY}) rotate(${torsoAngle})`);
+      leftHip.setAttribute('transform', `translate(-18, ${lHipY}) rotate(${lHipAngle})`);
+      leftKnee.setAttribute('transform', `translate(0, 38) rotate(${lKneeAngle})`);
+      rightHip.setAttribute('transform', `translate(18, ${rHipY}) rotate(${rHipAngle})`);
+      rightKnee.setAttribute('transform', `translate(0, 38) rotate(${rKneeAngle})`);
+
+      leftShoulder.setAttribute('transform', `translate(-34, -102) rotate(${lArmAngle})`);
+      rightShoulder.setAttribute('transform', `translate(34, -102) rotate(${rArmAngle})`);
+
+      requestAnimationFrame(animateCharacter);
+    }
+
+    /* =========================================================================
+       6. ОНОВЛЕННЯ ІНТЕРФЕЙСУ ТА КЕРУВАННЯ ЕТАПАМИ
+       ========================================================================= */
+    function buildStaticControls() {
+      // 7 індикаторів прогресу зверху
+      stepsContainer.innerHTML = '';
+      EXERCISES.forEach((ex, idx) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'py-1.5 px-1 rounded-xl text-[11px] sm:text-xs font-extrabold text-center transition-all border cursor-pointer';
+        pill.textContent = `${idx + 1}`;
+        pill.title = ex.command;
+        pill.addEventListener('click', () => selectExercise(idx, true));
+        stepsContainer.appendChild(pill);
+      });
+
+      // 7 кнопок швидкого вибору окремої вправи
+      exerciseButtonsGrid.innerHTML = '';
+      EXERCISES.forEach((ex, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'p-2 rounded-xl text-left text-xs font-extrabold flex items-center gap-1.5 border transition-all btn-bounce';
+        btn.innerHTML = `<span>${ex.icon}</span><span class="truncate">${ex.shortName}</span>`;
+        btn.addEventListener('click', () => selectExercise(idx, true));
+        exerciseButtonsGrid.appendChild(btn);
+      });
+    }
+
+    function updateUI() {
+      const ex = EXERCISES[currentIndex];
+      const totalSec = EXERCISES.reduce((acc, item) => acc + item.duration, 0);
+
+      progressLabel.textContent = `Вправа ${currentIndex + 1} із ${EXERCISES.length} • Загалом ${totalSec} сек`;
+      stepBadge.textContent = `Вправа ${currentIndex + 1} / ${EXERCISES.length}`;
+      liveMovementTag.textContent = isRunning ? ex.tag : '⏸️ Пауза / Очікування';
+      pencilTipColor.setAttribute('fill', ex.tipColor);
+
+      if (!isRunning && currentIndex === 0 && timeLeft === EXERCISES[0].duration) {
+        commandTitle.textContent = '«Привіт! Готові до мистецької руханки?»';
+        commandHint.textContent = 'Натисни «ПОЧАТИ РУХАНКУ!», і ми виконаємо 7 веселих вправ разом!';
+      } else {
+        commandTitle.textContent = `«${ex.command}»`;
+        commandHint.textContent = ex.hint;
+      }
+
+      timerNumber.textContent = timeLeft;
+      const pct = Math.max(0, (timeLeft / ex.duration) * 100);
+      timerRing.setAttribute('stroke-dasharray', `${pct}, 100`);
+
+      // Оновлення підсвітки кроків зверху
+      Array.from(stepsContainer.children).forEach((el, idx) => {
+        if (idx === currentIndex) {
+          el.className = 'py-1.5 px-1 rounded-xl text-[11px] sm:text-xs font-extrabold text-center transition-all border bg-gradient-to-r from-amber-400 to-orange-500 text-white border-orange-500 shadow-sm scale-105 cursor-pointer';
+        } else if (idx < currentIndex) {
+          el.className = 'py-1.5 px-1 rounded-xl text-[11px] sm:text-xs font-extrabold text-center transition-all border bg-emerald-100 text-emerald-800 border-emerald-300 cursor-pointer';
+        } else {
+          el.className = 'py-1.5 px-1 rounded-xl text-[11px] sm:text-xs font-extrabold text-center transition-all border bg-slate-100 text-slate-500 border-slate-200 cursor-pointer';
+        }
+      });
+
+      // Оновлення підсвітки кнопок швидкого вибору
+      Array.from(exerciseButtonsGrid.children).forEach((btn, idx) => {
+        if (idx === currentIndex) {
+          btn.className = 'p-2 rounded-xl text-left text-xs font-extrabold flex items-center gap-1.5 border-2 border-orange-400 bg-amber-100 text-orange-900 shadow-sm transition-all btn-bounce';
+        } else {
+          btn.className = 'p-2 rounded-xl text-left text-xs font-bold flex items-center gap-1.5 border border-slate-200 bg-slate-50 hover:bg-amber-50 text-slate-700 transition-all btn-bounce';
+        }
+      });
+
+      // Кнопка Старт / Пауза
+      if (isRunning) {
+        playPauseIcon.textContent = '⏸️';
+        playPauseText.textContent = 'ПАУЗА';
+      } else {
+        playPauseIcon.textContent = '▶️';
+        playPauseText.textContent = (currentIndex === 0 && timeLeft === EXERCISES[0].duration) ? 'ПОЧАТИ РУХАНКУ!' : 'ПРОДОВЖИТИ';
+      }
+    }
+
+    function selectExercise(idx, autoStart = true) {
+      currentIndex = idx;
+      timeLeft = EXERCISES[currentIndex].duration;
+      animStartTime = performance.now();
+      lastSoundPhase = -1;
+      hideFinishModal();
+
+      if (autoStart) {
+        isRunning = true;
+        startMusic();
+        startCountdown();
+      }
+      updateUI();
+    }
+
+    function startCountdown() {
+      stopCountdown();
+      secondInterval = setInterval(() => {
+        if (!isRunning) return;
+        timeLeft--;
+        if (timeLeft <= 0) {
+          if (currentIndex < EXERCISES.length - 1) {
+            selectExercise(currentIndex + 1, true);
+          } else {
+            finishWorkout();
+          }
+        } else {
+          updateUI();
+        }
+      }, 1000);
+    }
+
+    function stopCountdown() {
+      if (secondInterval) {
+        clearInterval(secondInterval);
+        secondInterval = null;
+      }
+    }
+
+    function togglePlayPause() {
+      ensureAudio();
+      if (!isRunning) {
+        isRunning = true;
+        animStartTime = performance.now();
+        startMusic();
+        startCountdown();
+      } else {
+        isRunning = false;
+        stopMusic();
+        stopCountdown();
+      }
+      updateUI();
+    }
+
+    function finishWorkout() {
+      isRunning = false;
+      stopMusic();
+      stopCountdown();
+      timeLeft = 0;
+      updateUI();
+
+      // Святкове конфеті на полотні
+      const confettiColors = ['#F59E0B', '#EC4899', '#3B82F6', '#10B981', '#8B5CF6', '#EF4444'];
+      for (let i = 0; i < 80; i++) {
+        spawnParticles(Math.random() * fxCanvas.width, Math.random() * fxCanvas.height * 0.5, confettiColors[i % confettiColors.length], 1, 3.5);
+      }
+
+      finishModal.classList.remove('opacity-0', 'pointer-events-none');
+      finishCard.classList.remove('scale-90');
+      finishCard.classList.add('scale-100');
+    }
+
+    function hideFinishModal() {
+      finishModal.classList.add('opacity-0', 'pointer-events-none');
+      finishCard.classList.remove('scale-100');
+      finishCard.classList.add('scale-90');
+    }
+
+    function restartWorkout() {
+      isRunning = false;
+      stopMusic();
+      stopCountdown();
+      currentIndex = 0;
+      timeLeft = EXERCISES[0].duration;
+      animStartTime = performance.now();
+      lastSoundPhase = -1;
+      particles = [];
+      hideFinishModal();
+      updateUI();
+    }
+
+    /* =========================================================================
+       7. ОБРОБНИКИ ПОДІЙ ТА ЗАПУСК
+       ========================================================================= */
+    playPauseBtn.addEventListener('click', togglePlayPause);
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < EXERCISES.length - 1) {
+        selectExercise(currentIndex + 1, true);
+      } else {
+        finishWorkout();
+      }
+    });
+
+    restartBtn.addEventListener('click', restartWorkout);
+    modalReplayBtn.addEventListener('click', () => {
+      restartWorkout();
+      togglePlayPause();
+    });
+
+    musicBtn.addEventListener('click', () => {
+      musicEnabled = !musicEnabled;
+      musicIcon.textContent = musicEnabled ? '🎵' : '🔇';
+      musicBtn.classList.toggle('opacity-60', !musicEnabled);
+      if (musicEnabled && isRunning) startMusic();
+      else stopMusic();
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    });
+
+    window.onload = function () {
+      resizeCanvas();
+      buildStaticControls();
+      updateUI();
+      requestAnimationFrame(animateCharacter);
+    };
+  </script>
+</body>
+</html>
